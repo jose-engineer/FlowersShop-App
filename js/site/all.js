@@ -643,47 +643,106 @@
     }
   };
 
-  function Item() {};
-  Item.prototype.type = 'goods';
-  Item.prototype.logItem = function() {
-    console.log('%c' + this.name,'font-weight: bold');
-    for (let prop in this) {
-      console.log(' ', prop, ': ', this[prop])
+  // function Item() {};
+  // Item.prototype.type = 'goods';
+  // Item.prototype.logItem = function() {
+  //   console.log('%c' + this.name,'font-weight: bold');
+  //   for (let prop in this) {
+  //     console.log(' ', prop, ': ', this[prop])
+  //   }
+  // };
+
+  class Item {
+    constructor() {
+      this.type = 'goods';      
     }
-  };
-
-  function Live(name, pot, quantity = 1) {
-    this.name = name;
-    this.pot = pot;
-    this.quantity = quantity;
+    logItem() {
+        console.log('%c' + this.name,'font-weight: bold');
+        for (let prop in this) {
+          console.log(' ', prop, ': ', this[prop])
+        }
+      }
   }
-  Live.prototype = new Item();
-  Live.prototype.storage = 'warm';
 
-  function Flower(quantity, color) {
-    this[color] = quantity;
+  // function Live(name, pot, quantity = 1) {
+  //   this.name = name;
+  //   this.pot = pot;
+  //   this.quantity = quantity;
+  // }
+  // Live.prototype = new Item();
+  // Live.prototype.storage = 'warm';
+
+  class Live extends Item {
+    constructor(name, pot, quantity = 1) {
+      super(); //use super when using “extends” and when you want to use “this” keyword
+      this.name = name;
+      this.pot = pot;
+      this.quantity = quantity;
+
+      this.storage = 'warm';
+    }    
   }
-  Flower.prototype = new Item();
 
-  function Cut() {};
-  Cut.prototype = new Item();
-  Cut.prototype.storage = 'cool';
+  // function Flower(quantity, color) {
+  //   this[color] = quantity;
+  // }
+  // Flower.prototype = new Item();
 
-  function Arrangement(name, vase, quantity = 1) {
-    this.name = name;
-    this.vase = vase;
-    this.quantity = quantity;
-  }
-  Arrangement.prototype = new Cut();
-
-  function Bouquet(name, vase) {
-    this.name = name;
-    this.vase = vase;
-  }
-  Bouquet.prototype = new Cut();
-  Bouquet.prototype.flowers = {
-    addStem: function(name, quantity = 1, color = 'Default') {
-      this[name] = new Flower(quantity, color) //set a key with a value equal to the result of calling the flower constructor
+  class Flower extends Item {
+    constructor(quantity, color) {
+      super();
+      this[color] = quantity;
     }
-  };
+  }
+
+  // function Cut() {};
+  // Cut.prototype = new Item();
+  // Cut.prototype.storage = 'cool';
+
+  class Cut extends Item { 
+    constructor(name, vase) { //taking parameters from here, our code never calls the Cut constructor directly tough
+      super();
+      this.name = name;
+      this.vase = vase;
+      this.storage = 'cool';
+    }
+  }
+
+  // function Arrangement(name, vase, quantity = 1) {
+  //   this.name = name; //repetitive using prototyping
+  //   this.vase = vase; //repetitive
+  //   this.quantity = quantity;
+  // }
+  // Arrangement.prototype = new Cut();
+
+  class Arrangement extends Cut {
+    constructor(name, vase, quantity = 1) {
+      super(name, vase); //get values from Cut when you call Arrangement
+      this.quantity = quantity;
+    }
+  }
+
+  // function Bouquet(name, vase) {
+  //   this.name = name; //repetitive using prototyping
+  //   this.vase = vase; //repetitive
+  // }
+  // Bouquet.prototype = new Cut();
+  // Bouquet.prototype.flowers = {
+  //   addStem: function(name, quantity = 1, color = 'Default') {
+  //     this[name] = new Flower(quantity, color) //set a key with a value equal to the result of calling the flower constructor
+  //   }
+  // };
+
+  class Bouquet extends Cut {
+    constructor(name, vase) {
+      super(name, vase);
+
+      this.flowers = {
+          addStem: function(name, quantity = 1, color = 'Default') {
+            this[name] = new Flower(quantity, color) //set a key with a value equal to the result of calling the flower constructor
+          }
+      }
+    }
+  }
+
 })();
