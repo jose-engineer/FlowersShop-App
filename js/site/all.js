@@ -506,19 +506,19 @@
         //   }
         // }
         newItem = new Bouquet(dataObject.itemname, dataObject.vasetype);
-        for (item in dataObject) {
+        for (item in dataObject) { //checking for data selecting specific stems on the "Build a Bouquet" page of the website 55 4599 8857
           // if item starts with 'qty' and has a value greater than 0
-          if(RegExp('qty.+').test(item) && dataObject[item] > 0) {
+          if(RegExp('qty.+').test(item) && dataObject[item] > 0) { //checks if the current item is for a flower that ALSO takes a color selection
             const stemType = item.substr(3);
-            const legend = $('#'+item).parent().parent().data('legend');
-            const key = legend.replace(/\s/g, '');
+            const legend = $('#'+item).parent().parent().data('legend'); //pull the text of the legend above the relevant text box
+            const key = legend.replace(/\s/g, ''); //create a key from text
             // if item requires a color selection and one has been specified
             if (['CL','GD','R','L','T'].includes(stemType) &&
             dataObject['color' + stemType] !== '---') {
               // add new item, specifying name, quantity, and color
               let stemName = dataObject['color' + stemType];
               // newItem.flowers[key] = {};
-              // newItem.flowers[key][stemName] = dataObject[item];
+              // newItem.flowers[key][stemName] = dataObject[item]; //selected number of stems
               // newItem.flowers[key].type = 'floral';
               newItem.flowers.addStem(key, dataObject[item], dataObject['color' + stemType]);
             } else {
@@ -683,7 +683,7 @@
   Bouquet.prototype = new Cut();
   Bouquet.prototype.flowers = {
     addStem: function(name, quantity = 1, color = 'Default') {
-      this[name] = new Flower(quantity, color)
+      this[name] = new Flower(quantity, color) //set a key with a value equal to the result of calling the flower constructor
     }
   };
 })();
